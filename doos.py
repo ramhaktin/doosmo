@@ -3,7 +3,7 @@ import threading
 import time
 
 # تنظیمات هدف
-target_url = "https://example.com"  # URL هدف (باید URL واقعی و کنترل‌شده باشد)
+target_url = "https://elecmake.com"  # URL هدف (باید URL واقعی و کنترل‌شده باشد)
 max_requests_per_second = 80000  # تعداد درخواست‌ها در ثانیه
 report_interval = 100  # تعداد درخواست‌ها برای گزارش‌دهی
 
